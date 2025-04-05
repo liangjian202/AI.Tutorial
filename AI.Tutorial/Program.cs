@@ -1,4 +1,6 @@
 ﻿
+using System.Text;
+using System.Xml;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,12 +14,27 @@ var app = builder.Build();
 
 var chatClient = app.Services.GetRequiredService<IChatClient>();
 
-var messages = new List<ChatMessage>
-{
-    new ChatMessage(ChatRole.User, "波多野结衣是谁？简单介绍一下她."),
-    // new ChatMessage(ChatRole.Assistant, "Hi there! How can I help you today?"),
-    // new ChatMessage(ChatRole.User, "What is the capital of France?")
-};
+var chatHistory = new List<ChatMessage>();
 
-var response = await chatClient.GetResponseAsync(messages);
-Console.WriteLine(response.Text);
+while (true)
+{
+    Console.WriteLine("Your prompt:");    
+    var userInput = Console.ReadLine();
+    if (string.IsNullOrEmpty(userInput))
+    {
+        continue;   
+    }
+    chatHistory.Add(new ChatMessage(ChatRole.User, userInput));
+
+    Console.WriteLine("AI Response:");
+
+    var chatResponseText = new StringBuilder();
+    var response = await chatClient.GetResponseAsync(chatHistory);
+    foreach (var message in response.Messages)
+    {
+        Console.WriteLine(message.Text);
+        chatResponseText.Append(message.Text);
+    }
+    chatHistory.Add(new ChatMessage(ChatRole.Assistant, chatResponseText.ToString()));
+    Console.WriteLine();
+}
