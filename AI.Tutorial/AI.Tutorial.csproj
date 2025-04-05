@@ -14,4 +14,16 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="posts\python.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="posts\csharp.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="posts\javascript.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
